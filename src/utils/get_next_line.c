@@ -14,6 +14,8 @@
 
 #define BUFFER_SIZE 42
 
+static char	*g_buffer = NULL;
+
 static char	*extract_line(char *buffer)
 {
 	char	*line;
@@ -88,15 +90,23 @@ static char	*read_to_buffer(int fd, char *buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer = NULL;
-	char		*line;
+	char	*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = read_to_buffer(fd, buffer);
-	if (!buffer)
+	g_buffer = read_to_buffer(fd, g_buffer);
+	if (!g_buffer)
 		return (NULL);
-	line = extract_line(buffer);
-	buffer = update_buffer(buffer);
+	line = extract_line(g_buffer);
+	g_buffer = update_buffer(g_buffer);
 	return (line);
+}
+
+void	get_next_line_cleanup(void)
+{
+	if (g_buffer)
+	{
+		free(g_buffer);
+		g_buffer = NULL;
+	}
 }

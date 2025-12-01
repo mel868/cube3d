@@ -81,15 +81,15 @@ static int	read_config(t_game *game, int fd)
 int	parse_file(t_game *game, char *filename)
 {
 	int	fd;
+	int	result;
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		return (-1);
-	if (read_config(game, fd) != 0)
-	{
-		close(fd);
-		return (-1);
-	}
+	result = read_config(game, fd);
 	close(fd);
+	get_next_line_cleanup();
+	if (result != 0)
+		return (-1);
 	return (0);
 }

@@ -97,7 +97,6 @@ static char	**read_map_lines(int fd, char *first, int *height)
 	}
 	*height = i;
 	lines[i] = NULL;
-	close(fd);
 	return (lines);
 }
 
